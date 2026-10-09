@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 de Octubre</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0a0a14;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        canvas {
+            cursor: pointer;
+        }
+        .texto {
+            color: #b39ddb;
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            opacity: 0;
+            animation: aparecer 2s forwards;
+            animation-delay: 2.5s;
+        }
+        @keyframes aparecer {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="flor" width="400" height="400"></canvas>
+    <div class="texto">Hoy no serás espectadora.</div>
+
+    <!-- REEMPLAZA ESTE LINK CON TU CANCIÓN (puede ser un archivo .mp3 online) -->
+    <audio id="musica" loop src="https://soundhelix.com"></audio>
+
+<script>
+    const canvas = document.getElementById('flor');
+    const ctx = canvas.getContext('2d');
+    const audio = document.getElementById('musica');
+    let t = 0;
+
+    // Arranca la música al primer clic en cualquier parte de la pantalla (exigencia de los navegadores)
+    document.addEventListener('click', () => {
+        audio.play().catch(e => console.log("Audio activado"));
+    }, { once: true });
+
+    function dibujarFlor() {
+        if (t > Math.PI * 2) return;
+
+        ctx.translate(200, 200);
+        
+        // Ecuación matemática para una rosa perfecta de 8 pétalos
+        let k = 4; 
+        let r = 140 * Math.sin(k * t);
+        let x = r * Math.cos(t);
+        let y = r * Math.sin(t);
+
+        // Pétalos morados con degradado sutil
+        ctx.fillStyle = '#7b1fa2';
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Destellos internos de los pétalos
+        ctx.fillStyle = '#ba68c8';
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Centro amarillo de la flor
+        ctx.fillStyle = '#ffd54f';
+        ctx.beginPath();
+        ctx.arc(0, 0, 12, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.translate(-200, -200);
+        
+        t += 0.008; // Velocidad del dibujo
+        requestAnimationFrame(dibujarFlor);
+    }
+
+    // Iniciar animación automáticamente al cargar
+    window.onload = () => {
+        setTimeout(dibujarFlor, 500);
+    };
+</script>
+</body>
+</html>
